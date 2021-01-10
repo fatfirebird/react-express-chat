@@ -22,8 +22,10 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "react/prop-types": "off",
         "semi": ["error", "never"],
         "quotes": ["error", "single"],
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }]
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+        "no-case-declarations": "off"
     }
 }
