@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 
 import Auth from '../pages/Auth'
-import Chat from '../pages/Chat'
+import Main from '../pages/Main'
 
 import AuthorizedRoute from './AuthorizedRoute'
 import UnathorizedRoute from './UnauthorizedRoute'
@@ -12,7 +12,7 @@ const Routes: React.FC = () => {
     <BrowserRouter>
     <Switch>
       <UnathorizedRoute exact path="/auth" component={Auth}/>
-      <AuthorizedRoute exact path="/main" component={Chat}/>
+      <AuthorizedRoute exact path="/main" component={Main}/>
       <Route exact path="*">
         <Redirect to="/main" />
       </Route>

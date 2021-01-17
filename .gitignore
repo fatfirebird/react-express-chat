@@ -1,6 +1,6 @@
-# ignore all node modules
+# ignore all js dev stuff
 */node_modules
-
+*/.eslintcache
 
 # ignore all system files
 .DS_Store
