@@ -1,5 +1,5 @@
 const express = require('express')
-const { Client } = require('pg')
+const { Sequelize } = require('sequelize')
 require('dotenv').config()
 const app = express()
 
@@ -13,25 +13,22 @@ app.listen(process.env.PORT, () => {
 })
 
 console.log(process.env)
-const client = new Client({
-  user: process.env.POSTGRES_USER,
+
+// Option 2: Passing parameters separately (other dialects)
+const sequelize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
   host: 'postgres',
-  database: process.env.POSTGRES_DB,
-  password: process.env.POSTGRES_PASSWORD,
+  dialect: 'postgres',
+  ssl: false,
   port: 5432,
-  ssl: false
 })
 
-const connection = () => {
-  client.connect((error) => {
-    try {
-      console.error('db connected')
-    } catch {
-      console.error('not connected')
-      console.error(error)
-      connection()
-    }
-  })
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate()
+    console.log('Connection has been established successfully.')
+  } catch (error) {
+    console.error('Unable to connect to the database:', error)
+  }
 }
 
-connection()
+connectDB()

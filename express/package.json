@@ -22,6 +22,8 @@
     "eslint-plugin-promise": "^4.2.1",
     "express": "^4.17.1",
     "nodemon": "^2.0.7",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "sequelize": "^6.5.0",
+    "sequelize-cli": "^6.2.0"
   }
 }

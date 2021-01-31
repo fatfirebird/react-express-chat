@@ -1,6 +1,7 @@
 # ignore all js dev stuff
 */node_modules
 */.eslintcache
+*/yarn-error.log
 
 # ignore all system files
 .DS_Store
