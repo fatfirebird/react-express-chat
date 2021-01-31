@@ -9,7 +9,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "pg": "^8.5.1"
+  },
   "devDependencies": {
     "dotenv": "^8.2.0",
     "eslint": "^7.17.0",

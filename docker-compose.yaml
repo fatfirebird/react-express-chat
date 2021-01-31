@@ -1,10 +1,57 @@
 version: '3'
 
 services: 
+  postgres:
+    container_name: postgres
+    environment: 
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_HOST: ${DATABASE_HOST}
+    image: postgres:latest
+    ports: 
+      - 5432:5432
+    volumes: 
+      - postgresVolume:/var/lib/postgresql/data
+      - ./logs:/logs
+    networks: 
+      - default
+    restart: always
+
+  pgadmin:
+    container_name: pgadmin
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    image: dpage/pgadmin4
+    ports: 
+      - 5050:80
+    volumes: 
+      - pgadminVolume:/var/lib/pgadmin
+    networks: 
+      - default
+    restart: always
+
   express:
     build:
       context: express
+    depends_on: 
+      - postgres
     ports: 
       - 8080:8080
     environment: 
-      - PORT=8080
+      PORT: 8080
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@$postgres:5432/${POSTGRES_DB}
+    networks: 
+      - default
+  
+volumes: 
+  postgresVolume:
+  pgadminVolume:
+networks:
+  default:
+    driver: bridge
