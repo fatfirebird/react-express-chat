@@ -14,6 +14,9 @@ module.exports = {
       hash: {
         type: Sequelize.STRING
       },
+      refresh: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

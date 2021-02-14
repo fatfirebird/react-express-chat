@@ -1,34 +1,44 @@
 const express = require('express')
 const { Sequelize } = require('sequelize')
 require('dotenv').config()
-const app = express()
+
+const userRoute = require('./User') 
 
 
-app.get('/', (req, res) => {
-  res.send('111')
-})
+class Server {
+  constructor() {
+    this.app = express()
+    this.sequalize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
+      host: 'postgres',
+      dialect: 'postgres',
+      ssl: false,
+      port: 5432,
+    })
 
-app.listen(process.env.PORT, () => {
-  console.log(`started on port: ${process.env.PORT}`)
-})
+    this._start()
+    this._connectDB(this.sequalize)
+    this._routes()
+  }
 
-console.log(process.env)
+   _routes() {
+    this.app.get('/', (req, res) => {
+      res.send('123')
+    })
 
-// Option 2: Passing parameters separately (other dialects)
-const sequelize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
-  host: 'postgres',
-  dialect: 'postgres',
-  ssl: false,
-  port: 5432,
-})
+    this.app.use('/api/user', userRoute)
+  }
 
-const connectDB = async () => {
-  try {
-    await sequelize.authenticate()
-    console.log('Connection has been established successfully.')
-  } catch (error) {
-    console.error('Unable to connect to the database:', error)
+  _start() {
+    this.app.listen(process.env.PORT, () => {
+      console.log(`started on port: ${process.env.PORT}`)
+    })
+  }
+
+  _connectDB(db) {
+    db.authenticate()
+      .then(() => console.log('Connection has been established successfully.'))
+      .catch(error => console.error('Unable to connect to the database:', error))
   }
 }
 
-connectDB()
+module.exports = new Server()
