@@ -44,6 +44,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@$postgres:5432/${POSTGRES_DB}
+      SECRET: ${SECRET}
     networks: 
       - default
   

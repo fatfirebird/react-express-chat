@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
+const verifyToken = require('../middlewares/verifyToken')
 
-router.post('/:id', (req, res, err) => {
+router.post('/:id', verifyToken, (req, res, err) => {
   console.log('post')
   res.send({some: 'json'})
 
 })
 
-router.get('/', (req, res, err) => {
+router.get('/', verifyToken, (req, res, err) => {
   console.log('get')
   res.send({some: 'json'})
 })
