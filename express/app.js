@@ -1,31 +1,30 @@
 const express = require('express')
 const { Sequelize } = require('sequelize')
+const sequelize = require('sequelize')
+
 require('dotenv').config()
 
-const userRoute = require('./User') 
-
+const API = require('./api') 
 
 class Server {
   constructor() {
     this.app = express()
+
     this.sequalize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
       host: 'postgres',
       dialect: 'postgres',
       ssl: false,
       port: 5432,
     })
-
+    
+    
     this._start()
     this._connectDB(this.sequalize)
-    this._routes()
+    this._routes(this.sequalize)
   }
-
-   _routes() {
-    this.app.get('/', (req, res) => {
-      res.send('123')
-    })
-
-    this.app.use('/api/user', userRoute)
+  
+  _routes(sequalize) {    
+    API(this.app, sequalize)
   }
 
   _start() {

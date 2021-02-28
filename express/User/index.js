@@ -1,16 +1,13 @@
-const express = require('express')
-const router = express.Router()
-const verifyToken = require('../middlewares/verifyToken')
+const model = require('./model')
 
-router.post('/:id', verifyToken, (req, res, err) => {
-  console.log('post')
-  res.send({some: 'json'})
+const post = require('./routes/post')
+const get = require('./routes/get')
 
-})
 
-router.get('/', verifyToken, (req, res, err) => {
-  console.log('get')
-  res.send({some: 'json'})
-})
+module.exports = (app, sequelize, version) => {
+  const UserModel = model(sequelize)
+  const path = `${version}/user`
 
-module.exports = router
+  post(app, UserModel, path)
+  get(app, UserModel, path)
+}
