@@ -3,15 +3,14 @@ module.exports = (app, UserModel, path) => {
     try {
       const id = req.params.id
 
-      const user = await UserModel.findAll({
+      const user = await UserModel.findOne({
         where: {
           id: id
         }
       })
 
-      if (!user) res.status(400).send({user: 'user does not exists'})
+      if (!user) res.status(400).send({message: 'user does not exists'})
 
-      console.log(user)
       res.send({
         name: user.name
       })  
