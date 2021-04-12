@@ -1,5 +1,5 @@
 # образ ноды
-FROM node:15.5.1-alpine3.10
+FROM node:14.15.4-stretch
 
 # создаем и устанавливаем рабочую директорию
 WORKDIR /usr/src/app
@@ -8,10 +8,15 @@ COPY . /usr/src/app
 
 # устанавлвиаем переменные окружения
 ENV PORT=PORT
+ENV POSTGRES_USER=POSTGRES_USER
+ENV POSTGRES_DB=POSTGRES_DB
+ENV POSTGRES_PASSWORD=POSTGRES_PASSWORD
+ENV SECRET=SECRET
+
 # устанавливаем зависимости
 RUN yarn 
 
 # декларируем порт
 EXPOSE 8080
 # задаем команду при запуске контейнера
-ENTRYPOINT ["node", "app.js"]
+CMD ["node", "app.js"]

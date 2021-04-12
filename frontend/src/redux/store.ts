@@ -2,10 +2,10 @@ import { applyMiddleware, createStore } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import rootReducer from './reducers'
-import { sagatest } from './sagas'
-import { IUser } from './reducers/user'
-import { IChat } from './reducers/chat'
+import rootReducer from './rootReducer'
+import rootSaga from './rootSaga'
+import IUser from './User/types'
+import { IChat } from './Chat/chat'
 
 export interface IRootState {
   user: IUser
@@ -16,11 +16,9 @@ const saga = createSagaMiddleware()
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(
-    applyMiddleware(saga)
-  )
+  composeWithDevTools(applyMiddleware(saga))
 )
 
-saga.run(sagatest)
+saga.run(rootSaga)
 
 export default store

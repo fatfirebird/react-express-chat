@@ -1,33 +1,128 @@
-import React from 'react'
-import { Paper, Box, Typography, TextField, Button } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import {
+  Paper,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Snackbar,
+} from '@material-ui/core'
+import MuiAlert from '@material-ui/lab/Alert'
+import { useDispatch, useSelector } from 'react-redux'
+import { useForm, Controller } from 'react-hook-form'
 
-import { login } from '../../redux/actions/user'
+import { postAuth } from '../../redux/User'
+import { IRootState } from '../../redux/store'
+import WithLoader from '../UI/WithLoader'
+import { requiredRule, minLength } from '../../utils/validation/rules'
+
+interface IForm {
+  name: string
+  password: string
+}
 
 const AuthForm: React.FC = () => {
+  const { error, isLoading } = useSelector((state: IRootState) => state.user)
+  const [hasError, setError] = useState<boolean>(false)
+
+  const { control, handleSubmit } = useForm<IForm>({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    shouldFocusError: true,
+  })
+
   const dispatch = useDispatch()
 
-  const handleSubmit = () => {
-    console.log('123')
-    dispatch(login())
+  useEffect(() => {
+    setError(!!error)
+  }, [error, isLoading])
+
+  const submit = (data: IForm) => {
+    dispatch(postAuth(data))
   }
 
-  return(
+  return (
     <Paper elevation={2}>
-      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding="25px">
+      <Snackbar
+        open={hasError}
+        onClose={() => setError(false)}
+        autoHideDuration={4000}
+        anchorOrigin={{
+          horizontal: 'right',
+          vertical: 'top',
+        }}
+      >
+        <MuiAlert elevation={6} variant="filled" severity="error">
+          {error}
+        </MuiAlert>
+      </Snackbar>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        padding="25px"
+      >
         <Box marginBottom="25px">
           <Typography>Авторизуйтесь</Typography>
         </Box>
-        <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" alignItems="center">
+        <Box
+          component="form"
+          onSubmit={handleSubmit(submit)}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+        >
           <Box marginBottom="25px">
-            <TextField label="Логин" variant="outlined" />
+            <Controller
+              control={control}
+              rules={{
+                ...requiredRule(),
+              }}
+              name="name"
+              render={({
+                fieldState: { error, invalid },
+                field: { onChange },
+              }) => (
+                <TextField
+                  helperText={error?.message}
+                  error={invalid}
+                  label="Логин"
+                  variant="outlined"
+                  onChange={onChange}
+                />
+              )}
+            />
           </Box>
           <Box marginBottom="25px">
-            <TextField label="Пароль" variant="outlined" />
+            <Controller
+              control={control}
+              rules={{
+                ...requiredRule(),
+                ...minLength(6),
+              }}
+              name="password"
+              render={({
+                fieldState: { error, invalid },
+                field: { onChange },
+              }) => (
+                <TextField
+                  helperText={error?.message}
+                  error={invalid}
+                  label="Пароль"
+                  variant="outlined"
+                  onChange={onChange}
+                />
+              )}
+            />
           </Box>
-          <Box>
-            <Button onClick={handleSubmit} variant="contained" color="primary">Войти</Button>
-          </Box>
+          <WithLoader loading={isLoading}>
+            <Box>
+              <Button type="submit" variant="contained" color="primary">
+                Войти
+              </Button>
+            </Box>
+          </WithLoader>
         </Box>
       </Box>
     </Paper>
