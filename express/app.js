@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const { Sequelize } = require('sequelize')
 
 require('dotenv').config()
@@ -27,6 +28,10 @@ class Server {
   }
 
   _start() {
+    this.app.use(cors({
+      origin: 'http://localhost:3000',
+      credentials: true
+    }))
     this.app.listen(process.env.PORT, () => {
       console.log(`started on port: ${process.env.PORT}`)
     })
