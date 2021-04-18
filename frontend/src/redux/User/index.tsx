@@ -5,6 +5,7 @@ const initialState = {
   token: '',
   isLoading: false,
   isAuthorized: false,
+  id: null,
 } as IUser
 
 const authSlice = createSlice({
@@ -19,15 +20,24 @@ const authSlice = createSlice({
       ...state,
       isLoading: false,
       isAuthorized: true,
-      token: payload,
+      ...payload,
     }),
     postAuthError: (state, { payload: error }) => ({
       ...state,
       isLoading: false,
       error,
     }),
+
+    logout: (state) => ({
+      ...initialState,
+    }),
   },
 })
 
-export const { postAuth, postAuthSuccess, postAuthError } = authSlice.actions
+export const {
+  postAuth,
+  postAuthSuccess,
+  postAuthError,
+  logout,
+} = authSlice.actions
 export default authSlice.reducer

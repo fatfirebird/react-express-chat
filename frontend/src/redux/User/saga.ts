@@ -9,7 +9,7 @@ import * as actions from './'
 export function* postAuthWorker({ payload }: PayloadAction): SagaIterator {
   try {
     const { data } = yield call(AuthService.login, payload)
-    yield put(actions.postAuthSuccess(data.token))
+    yield put(actions.postAuthSuccess(data))
     Cookies.set('token', data.token)
   } catch ({ error, status }) {
     console.log(error)

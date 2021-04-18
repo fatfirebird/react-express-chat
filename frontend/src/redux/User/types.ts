@@ -3,4 +3,5 @@ export default interface IUser {
   isAuthorized: boolean
   error: any
   token: string
+  id: number | null
 }
