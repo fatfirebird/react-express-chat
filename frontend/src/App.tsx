@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Container } from '@material-ui/core'
 import Routes from './routes'
+import Header from './components/Header'
+import { useSelector } from 'react-redux'
+import { IRootState } from './redux/store'
 
 const App: React.FC = () => {
-  useEffect(() => {
-    console.log('auth check')
-  }, [])
+  const { isAuthorized } = useSelector((state: IRootState) => state.user)
 
   return (
-    <Container className="container">
-      <Routes />
-    </Container>
+    <>
+      {isAuthorized && <Header />}
+      <Container className="container">
+        <Routes />
+      </Container>
+    </>
   )
 }
 

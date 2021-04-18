@@ -22,7 +22,7 @@ module.exports = (app, UserModel, path) => {
         res.status(401).send({message: 'Invalid name or password'})
       } else {
         const token = generateToken(user.id)
-        res.send({token: token})
+        res.send({token: token, id: user.id})
       }
     } catch (error) {
       next(error)

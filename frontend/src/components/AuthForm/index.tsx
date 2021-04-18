@@ -111,6 +111,7 @@ const AuthForm: React.FC = () => {
                   error={invalid}
                   label="Пароль"
                   variant="outlined"
+                  type="password"
                   onChange={onChange}
                 />
               )}
