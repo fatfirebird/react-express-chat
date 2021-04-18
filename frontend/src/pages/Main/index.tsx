@@ -1,11 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Grid } from '@material-ui/core'
 
 import Chat from '../../components/ChatContainer'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUser } from '../../redux/User'
+import { IRootState } from '../../redux/store'
+import WithLoader from '../../components/UI/WithLoader'
 
 const Main: React.FC = () => {
+  const { isAuthorized, id, isLoading } = useSelector(
+    (state: IRootState) => state.user
+  )
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isAuthorized && id) {
+      dispatch(getUser(id))
+    }
+  }, [isAuthorized, id])
+
   return (
-    <>
+    <WithLoader loading={isLoading}>
       <Grid
         className="container container--height"
         justify="center"
@@ -23,7 +38,7 @@ const Main: React.FC = () => {
           <Chat />
         </Grid>
       </Grid>
-    </>
+    </WithLoader>
   )
 }
 

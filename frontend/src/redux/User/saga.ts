@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 
 import AuthService from '../../services/Auth'
 import * as actions from './'
+import UserService from '../../services/User'
 
 export function* postAuthWorker({ payload }: PayloadAction): SagaIterator {
   try {
@@ -17,6 +18,19 @@ export function* postAuthWorker({ payload }: PayloadAction): SagaIterator {
   }
 }
 
+export function* getUserWorker({
+  payload,
+}: PayloadAction<number>): SagaIterator {
+  try {
+    const { data } = yield call(UserService.getUser, payload)
+    yield put(actions.getUserSuccess(data))
+  } catch ({ error, status }) {
+    console.log(error)
+    yield put(actions.postAuthError(error.message))
+  }
+}
+
 export function* watchLogin(): SagaIterator {
   yield takeLatest<PayloadAction>(actions.postAuth, postAuthWorker)
+  yield takeLatest<PayloadAction<number>>(actions.getUser, getUserWorker)
 }
