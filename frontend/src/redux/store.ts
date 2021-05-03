@@ -7,7 +7,7 @@ import { persistReducer } from 'redux-persist'
 import rootReducer from './rootReducer'
 import rootSaga from './rootSaga'
 import IUser from './User/types'
-import { IChat } from './Chat/chat'
+import { IChat } from './__Chat/chat'
 export interface IRootState {
   user: IUser
   chat: IChat

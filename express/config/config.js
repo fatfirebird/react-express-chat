@@ -10,7 +10,7 @@ module.exports = {
     dialect: 'postgres',
     dialectOptions: {
       ssl: false,
-    }
+    },
   },
   test: {
     username: process.env.POSTGRES_USER,

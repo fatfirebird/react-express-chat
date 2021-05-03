@@ -6,7 +6,8 @@ const { Sequelize } = require('sequelize')
 
 require('dotenv').config()
 
-const API = require('./api') 
+const API = require('./api')
+const sockets = require('./sockets')
 
 class Server {
   constructor() {
@@ -44,10 +45,7 @@ class Server {
       transports: ['websocket'],
     })
 
-    this.io.on('connect', (socket) => {
-      console.log(socket)
-      console.log('socket')
-    })
+    sockets(this.io, this.sequalize)
 
     this.server.listen(process.env.PORT, () => {
       console.log(`started on port: ${process.env.PORT}`)

@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 
 const userRoutes = require('./User')
 const authRoutes = require('./Auth')
+const messageRoutes = require('./Message')
 
 
 module.exports = (app, sequalize) => {
@@ -13,4 +14,5 @@ module.exports = (app, sequalize) => {
 
   userRoutes(app, sequalize, version)
   authRoutes(app, sequalize, version)
+  messageRoutes(app, sequalize, version)
 }
