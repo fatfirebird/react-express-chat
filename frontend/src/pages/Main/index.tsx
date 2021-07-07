@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getUser } from '../../redux/User'
 import { IRootState } from '../../redux/store'
 import WithLoader from '../../components/UI/WithLoader'
+import websocket from '../../services/Websocket'
+import { connectChat } from '../../redux/Chat'
 
 const Main: React.FC = () => {
   const { isAuthorized, id, isLoading } = useSelector(
@@ -16,6 +18,8 @@ const Main: React.FC = () => {
   useEffect(() => {
     if (isAuthorized && id) {
       dispatch(getUser(id))
+
+      dispatch(connectChat())
     }
   }, [isAuthorized, id])
 

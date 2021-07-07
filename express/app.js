@@ -1,14 +1,22 @@
 const express = require('express')
 const cors = require('cors')
+const http = require('http')
+const io = require('socket.io')
 const { Sequelize } = require('sequelize')
 
 require('dotenv').config()
 
-const API = require('./api') 
+const API = require('./api')
+const sockets = require('./sockets')
 
 class Server {
   constructor() {
     this.app = express()
+    this.cors = {
+      origin: 'http://localhost:3000',
+      credentials: true,
+    }
+
 
     this.sequalize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
       host: 'postgres',
@@ -28,11 +36,18 @@ class Server {
   }
 
   _start() {
-    this.app.use(cors({
-      origin: 'http://localhost:3000',
-      credentials: true
-    }))
-    this.app.listen(process.env.PORT, () => {
+    this.app.use(cors(this.cors))
+
+    this.server = http.Server(this.app)
+    this.io = io(this.server, {
+      cors: this.cors,
+      path: '/api/chat',
+      transports: ['websocket'],
+    })
+
+    sockets(this.io, this.sequalize)
+
+    this.server.listen(process.env.PORT, () => {
       console.log(`started on port: ${process.env.PORT}`)
     })
   }
